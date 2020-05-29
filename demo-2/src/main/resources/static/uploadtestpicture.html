@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <title>Title</title>
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <h3>文件上传</h3>
+    <input type="file" name="file" id ="file" multiple>
+    <input type="button" value="上传" onclick="uploadimg()">
+    <div id="res"></div>
+    <form action="/show" method="get">
+        <input type="submit" value="查询分页数据"/>
+    </form>
+
+    <script type="text/javascript">
+            function uploadimg(){
+                var formdata = new FormData();
+                var fileArray = $("#file")[0].files;
+                for(var i=0;i<fileArray.length;i++){
+                    formdata.append("file",fileArray[i]);
+                }
+                $.ajax({
+                    type: "post",
+                    url : "/fileupload",
+                    data: formdata,
+                    processData : false, // 使数据不做处理
+                    contentType : false, // 不要设置Content-Type请求头
+                    success: function (message) {
+                        if(message.message == true){
+                            alert("上传成功");
+                            var xArray = new Array();
+                            for(var i=0;i<message.path.length;i++){
+                                var myArray = message.path[i].split('/');
+                                var sArray = myArray[1].split('.');
+                                if(sArray[1] == "mp4"){
+                                    var txt = "<video src = http://172.29.14.51:25100/picturebucket/"+message.path[i] +" style=width:80px;height:80px"+ "/>";
+                                    xArray.push(txt);
+                                }else{
+                                    var txt = "<img src = http://172.29.14.51:25100/picturebucket/"+message.path[i] +" style=width:80px;height:80px"+"/>";
+                                    xArray.push(txt);
+                                }
+                                console.log(xArray);
+                            }
+                            $("#res").html(xArray);
+                        }
+                    }
+                })
+        }
+    </script>
+</body>
+</html>

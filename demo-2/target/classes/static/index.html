@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.bootcss.com/jquery/3.5.0/jquery.js"></script>
+</head>
+<body>
+    <div id="result"></div>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $.ajax({
+                    type: "post",
+                    url : "/showAnchor",
+                    data: "",
+                    beforeSend: function(XMLHttpRequest){
+                        var token = sessionStorage.getItem("token");
+                        XMLHttpRequest.setRequestHeader("Authorization", token);
+                    },
+                    success: function (anchorList) {
+                    var myArray = new Array();
+                    for(var i = 0 ;i < anchorList.anchorList.length;i++){
+                        var txt = "<h3>"+anchorList.anchorList[i].anchorName+"</h3>";
+                        myArray.push(txt);
+                    }
+                    $("#result").html(myArray);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.bootcss.com/jquery/3.5.0/jquery.js"></script>
+    <style type="text/css">
+        input{
+          display: none;
+        }
+    </style>
+</head>
+<body>
+    主播
+    <div id = "anchor">
+
+    </div>
+    用户
+    <div id = "user">
+
+    </div>
+    <a href="showAnchor.html">展示主播</a>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $.ajax({
+                type:"post",
+                url:"/showImg",
+                data:"",
+                beforeSend: function(XMLHttpRequest){
+                    var token = sessionStorage.getItem("token");
+                    XMLHttpRequest.setRequestHeader("Authorization", token);
+                },
+                success:function(anchorAndUser){
+                    var spArray = new Array();
+                    for(var i = 0;i < anchorAndUser.anchorList.length;i++){
+                        var aId = anchorAndUser.anchorList[i].anchorId;
+                        var txt = "<a href = /findAnchorconcern?anchorId="+aId+">"
+                        +"<img src = '"+anchorAndUser.anchorList[i].anchorImg+"' >"
+                        +"</a>";
+                        spArray.push(txt);
+                    }
+                    $("#anchor").html(spArray);
+                    var spArray = new Array();
+                    for(var i = 0;i < anchorAndUser.userList.length;i++){
+                        var uId = anchorAndUser.userList[i].userId;
+                        var txt = "<a href = /findUserconcern?userId="+uId+">"
+                        +"<img src = '"+anchorAndUser.userList[i].userImg+"'   >"
+                        +"</a>";
+                        spArray.push(txt);
+                    }
+                    $("#user").html(spArray);
+                }
+            });
+
+        });
+
+    </script>
+</body>
+</html>

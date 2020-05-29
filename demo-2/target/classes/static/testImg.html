@@ -1,0 +1,39 @@
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>无标题文档</title>
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <style type="text/css">
+        .img-square{
+            margin-left: 30px;
+            margin-top: 10px;
+         }
+        .closeLayer{
+            z-index: 99;
+            position:absolute; /*绝对定位*/
+            left:270px; /*位置自己看着调整，在图片上方*/
+            top:5px;
+         }
+    </style>
+</head>
+
+<body>
+
+    <div class="row">
+        <div class="col-xs-3" id = "aboutImg">
+            <img class="img-square" src="../img/5.PNG">
+            <div class="closeLayer"  >
+                <img src="../img/u624.png" style="width:10px;height:10px" id="closeImg"/>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    $(document).ready(function(){
+         $("#closeImg").click(function(){
+            $("#aboutImg").remove();
+         });
+    });
+</script>
+</html>

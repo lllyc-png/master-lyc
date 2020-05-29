@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.bootcss.com/jquery/3.5.0/jquery.js"></script>
+</head>
+<body>
+    <div id = "result"></div>
+    <input type="button" value = "查看全部" id="showAll"/>
+    <script type="text/javascript">
+        $(document).ready(function(){
+           $("#showAll").click(function(){
+                window.location.href="/index.html";
+            });
+            $.ajax({
+                    type: "post",
+                    url : "/showAnchor",
+                    data: "",
+                    beforeSend: function(XMLHttpRequest){
+                        var token = sessionStorage.getItem("token");
+                        XMLHttpRequest.setRequestHeader("Authorization", token);
+                    },
+                    success: function (anchorList) {
+                        console.log(anchorList);
+                        var myArray = new Array();
+                        for(var i = 0 ;i < 1;i++){
+                            var txt = "<h3>"+anchorList.anchorList[i].anchorName+"</h3>";
+                            myArray.push(txt);
+                        }
+                        $("#result").html(myArray);
+                    }
+                });
+        });
+    </script>
+</body>
+</html>

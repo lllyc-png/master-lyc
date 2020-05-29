@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <script src="https://cdn.bootcss.com/jquery/3.5.0/jquery.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <table class="table table-striped">
+        <tr>
+            <th>id</th>
+            <th>phone</th>
+            <th>username</th>
+            <th>password</th>
+        </tr>
+        <tr th:each="user : ${list}">
+            <td th:text="${user.userId}"></td>
+            <td th:text="${user.phone}"></td>
+            <td th:text="${user.userName}"></td>
+            <td th:text="${user.passWord}"></td>
+        </tr>
+    </table>
+
+    <nav>
+        <ul class="pagination">
+            <li>
+                <a th:if="${pageNum eq 1 }"  th:href="@{/show(pageNum=1,pageSize=${pageSize})}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+                <a th:if="${pageNum gt 1 }" th:href="@{/show(pageNum=${pageNum-1},pageSize=${pageSize})}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            <li th:each="pageNo : ${#numbers.sequence(1, totalPages)}">
+                <a  th:href="@{/show(pageNum=${pageNo},pageSize=${pageSize})}">
+                    <span th:text="${pageNo}"></span>
+                </a>
+            </li>
+
+            <li>
+                <a th:if="${pageNum lt totalPages}" th:href="@{/show(pageNum=${pageNum+1},pageSize=${pageSize})}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+                <a th:if="${pageNum eq totalPages}" th:href="@{/show(pageNum=${totalPages},pageSize=${pageSize})}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style type="text/css">
+        #imgA{
+           width:80px;
+           height:80px;
+        }
+        #videoA{
+            width:80px;
+            height:80px;
+         }
+        #img{
+            margin-left: 30px;
+            margin-top: 10px;
+         }
+        #cImg{
+            width:10px;
+            height:10px;
+            position:relative;
+            bottom:40px;
+         }
+    </style>
+</head>
+<body>
+    <button type="button" class="btn btn-primary" data-toggle="modal"  data-target="#subModal">点这个按钮</button>
+    <div class="modal fade" id="subModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div id = "nav">
+                    <div id = "img">
+                    </div>
+                </div>
+                <h3>文件上传</h3>
+                <input type="file" name="file" id ="file" multiple>
+                <input type="button" value="看一下" class="btn btn-success" id="showimg">
+                <br>
+                <input type="button" value="上传" class="btn btn-success" onclick="uploadimg()">
+                <h3>文件删除</h3>
+                <input type="button" value="取消" class="btn btn-success" onclick="removeimg()">
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        //弹出模态框
+        $('#subModal').on('show.bs.modal', function (event) {
+             var button = $(event.relatedTarget) // 触发事件的按钮
+             var main_name = button.parent().prev().prev();
+             var main_id = button.next().next();
+             $('#updatemainname').val(main_name.text());
+             $('#updatemainid').val(main_id.val());
+        });
+        //全局数组存放删除图片的名字
+        var imgArray = new Array();
+        //删除图片
+        function closeImg(obj){
+          var imgId = obj.parentNode.id;
+          obj.parentNode.remove();
+          var fileArray = $("#file")[0].files;
+          for(var i=0;i<fileArray.length;i++){
+            if(fileArray[i].name == imgId){
+                imgArray.push(imgId);
+            }
+          }
+       }
+       //上传图片
+        function uploadimg(){
+            var formdata = new FormData();
+            var fileArray = $("#file")[0].files;
+            for(var i=0;i<fileArray.length;i++){
+                if(imgArray.indexOf(fileArray[i].name) == -1){
+                    formdata.append("file",fileArray[i]);
+                }
+            }
+            $.ajax({
+                type: "post",
+                url : "/upload",
+                data: formdata,
+                processData : false, // 使数据不做处理
+                contentType : false, // 不要设置Content-Type请求头
+                success: function (message) {
+                    if(message.message == true){
+                        alert("上传成功");
+                    }
+                }
+            })
+        }
+        //删除上传后的图片
+        function removeimg(){
+            $.ajax({
+                type: "post",
+                url : "/removeFile",
+                success: function (message) {
+                    if(message.message == true){
+                        alert("删除成功");
+                    }
+                }
+            })
+        }
+        //点击看一下
+        $(document).ready(function(){
+            $("#showimg").click(function(){
+                var fileArray = $("#file")[0].files;
+                var myArray = new Array();
+                for(var i=0;i<fileArray.length;i++){
+                    var itxt = fileArray[i].name;
+                    var sArray = itxt.split('.');
+                    var txt = "";
+                    console.log(sArray);
+                    console.log(itxt);
+                    if(sArray[1] == "mp4"){
+                        txt = "<div id="+itxt+">"+"<video src = "+"/实习/icon/"+itxt + " id=videoA" +">"+"</video>"
+                        +"<img src="+"../img/u624.png"+ " id=cImg" +" onclick=closeImg(this)"+">"
+                        +"</div>";
+                    }else{
+                        txt = "<div id="+itxt+">"+"<img src = "+"/实习/icon/"+itxt + " id=imgA" +">"
+                        +"<img src="+"../img/u624.png"+ " id=cImg" +" onclick=closeImg(this)"+">"
+                        +"</div>";
+                    }
+                    myArray.push(txt);
+                }
+                $("#img").html(myArray);
+            });
+
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+my-config:
+  file-path: D:\
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  servlet:
+    multipart.max-file-size: 80MB
+    multipart.max-request-size: 100MB
+
+
+

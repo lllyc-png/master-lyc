@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.bootcss.com/jquery/3.5.0/jquery.js"></script>
+</head>
+<body>
+<h2>你好啊</h2>
+<select id = "sortmethod">
+    <option value = "1">按时间排序</option>
+    <option value = "2">按热度排序</option>
+</select>
+<div id = "result">
+
+</div>
+<script type="text/javascript">
+        $(document).ready(function(){
+           $("#sortmethod").mouseleave(function(){
+               var options=$("#sortmethod option:selected");
+                var option = options.val();
+                $.ajax({
+                    type: "post",
+                    url : "/selectOption",
+                    data: {"option": option},
+                    success: function (musicResultList) {
+                        var myArray = new Array();
+                        for(var i = 0 ;i < musicResultList.length;i++){
+                            var txt = "<tr>"+"<td>"+"&nbsp;&nbsp;"+musicResultList[i].name+"</td>"+"<td>"+"&nbsp;&nbsp;"+musicResultList[i].hot+"</td>"+"<td>"+"&nbsp;&nbsp;"+musicResultList[i].time+"</td>"+"</tr>";
+                            myArray.push(txt);
+                        }
+                        $("#result").html(myArray);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
